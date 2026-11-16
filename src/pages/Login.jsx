@@ -1,8 +1,8 @@
-import './login.css'
+import './Login.css'
 
 export default function Login() {
  return (
-   <div>
+   <div className="login-container">
         <h1>Stocker</h1>
         <h2>Faça login</h2>
 
