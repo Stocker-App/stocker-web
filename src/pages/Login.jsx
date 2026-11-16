@@ -6,8 +6,8 @@ export default function Login() {
 
         <form>
           <div>
-            <label htmlFor="text"></label>
-            <input type="text" id="text" name="text" required placeholder="Nome de usuário" />
+            <label htmlFor="username"></label>
+            <input type="text" id="username" name="username" required placeholder="Nome de usuário" />
           </div>
           <div>
             <label htmlFor="password"></label>
