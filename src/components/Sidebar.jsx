@@ -1,8 +1,11 @@
+import {useState} from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import './Sidebar.css';
 
 export default function Sidebar() {
  const navigate = useNavigate();
+ 
+ const [retraida, setRetraida] = useState(false);
 
  const logout = () => {
     // Remove o token do localStorage para realizar logout
@@ -13,9 +16,13 @@ export default function Sidebar() {
   }
  
     return (
-   <aside className="sidebar">
+   <aside className={retraida ? 'sidebar sidebar-retraida' : 'sidebar'}>
        <div className="sidebar-header">
               <h2>Stocker</h2>
+
+              <button onClick={() => setRetraida(!retraida)} className="retract-button">
+                  {retraida ? '>' : '<'}
+              </button>
        </div>
 
         <nav className="sidebar-nav">
