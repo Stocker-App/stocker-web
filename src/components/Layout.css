@@ -1,0 +1,10 @@
+.layout-container {
+  display: flex; /*Coloca a barra lateral e o conteúdo lado a lado*/
+  min-height: 100vh; /*Faz ocupar toda a altura da tela*/
+}
+
+.layout-content {
+  flex: 1; /*Faz o conteúdo (a página) ocupar todo o resto da tela*/
+  padding: 30px; /*Coloca um espaçamento para uma coisa não ficar colada na outra*/
+  background-color: rgb(200, 165, 136); /*Cor de fundo da página*/ 
+}
