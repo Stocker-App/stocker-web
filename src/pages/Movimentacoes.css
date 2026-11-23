@@ -1,0 +1,258 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #c8a588;
+}
+
+.movimentacoes-conteudo {
+  flex: 1;
+  padding: 36px 48px;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Barra vertical decorativa no canto direito igual ao design */
+.movimentacoes-conteudo::after {
+  content: '';
+  position: fixed;
+  top: 40px;
+  right: 24px;
+  bottom: 40px;
+  width: 3px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* Desfoca todo o fundo quando o menu de filtro abre */
+.filtro-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(38, 14, 10, 0.25);
+  backdrop-filter: blur(5px);
+  z-index: 20;
+  animation: fadeBackdrop 0.22s ease forwards;
+}
+
+@keyframes fadeBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Topo com botão redondo de filtro */
+.movimentacoes-topo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 30;
+}
+
+.filtro-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Botão redondo "Filtro" */
+.btn-filtro-redondo {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background-color: #260e0a;
+  color: #ffffff;
+  border: none;
+  padding: 0;
+  margin-top: 0;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-filtro-redondo:hover {
+  background-color: #3d1812;
+  transform: scale(1.04);
+  letter-spacing: normal;
+}
+
+.btn-filtro-redondo.aberto {
+  background-color: #3d1812;
+  transform: scale(0.97);
+}
+
+/* Container dos 3 botões saindo de baixo do botão redondo */
+.filtros-dropdown {
+  position: absolute;
+  top: 84px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(-14px) scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.filtros-dropdown.visivel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.btn-filtro {
+  background-color: #dec1a8;
+  color: #260e0a;
+  border: none;
+  padding: 10px 26px;
+  margin-top: 0;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-filtro:hover {
+  background-color: #eed6c2d0;
+  transform: translateX(4px);
+  letter-spacing: normal;
+}
+
+.btn-filtro.ativo {
+  background-color: #fdf0e6;
+  color: #260e0a;
+  font-weight: 700;
+}
+
+.btn-filtro.ativo:hover {
+  background-color: #eed6c2d0;
+  transform: translateX(4px);
+  letter-spacing: normal;
+}
+
+/* Lista de cards */
+.lista-movimentacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 980px;
+  position: relative;
+  z-index: 2;
+}
+
+.card-movimentacao {
+  display: flex;
+  align-items: center;
+  padding: 24px 36px;
+  border-radius: 32px;
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.20);
+  transition: transform 0.15s ease;
+}
+
+.card-movimentacao:hover {
+  transform: translateY(-2px);
+}
+
+.card-verde {
+  background-color: #ecffd9;
+}
+
+.card-rosa {
+  background-color: #ffd9d9;
+}
+
+.card-imagem-box {
+  width: 210px;
+  height: 135px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #ffffff;
+}
+
+.card-imagem-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+  color: #260e0a;
+}
+
+.card-info h2 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.texto-quantidade {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.texto-obs {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.texto-data {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.mensagem-status,
+.mensagem-erro {
+  text-align: center;
+  color: #260e0a;
+  font-weight: 600;
+  margin-top: 40px;
+}
+
+/* Responsividade básica para celular/tablet */
+@media (max-width: 768px) {
+  .movimentacoes-conteudo {
+    padding: 20px;
+  }
+
+  .card-movimentacao {
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .card-imagem-box {
+    width: 100%;
+    height: 160px;
+  }
+}
