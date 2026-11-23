@@ -34,6 +34,7 @@ const DADOS_INICIAIS = [
 export default function Movimentacoes() {
   const [movimentacoes, setMovimentacoes] = useState([]);
   const [filtro, setFiltro] = useState('TODOS');
+  const [busca, setBusca] = useState('');
   const [filtroAberto, setFiltroAberto] = useState(false);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState('');
@@ -61,11 +62,26 @@ export default function Movimentacoes() {
     setFiltroAberto(false);
   }
 
-  const listaFiltrada = movimentacoes.filter((item) => {
-    if (filtro === 'TODOS') return true;
-    return item.tipo === filtro;
-  });
+const termoBusca = busca.trim().toLowerCase();
 
+  const listaFiltrada = movimentacoes.filter((item) => {
+    const bateTipo = filtro === 'TODOS' || item.tipo === filtro;
+
+    const textoMovimento =
+      item.tipo === 'ENTRADA'
+        ? `Entrou ${item.quantidade} ${item.quantidade === 1 ? 'unidade' : 'unidades'}`
+        : `Saiu ${item.quantidade} ${item.quantidade === 1 ? 'unidade' : 'unidades'}`;
+
+    const bateTexto =
+      !termoBusca ||
+      item.produtoNome.toLowerCase().includes(termoBusca) ||
+      textoMovimento.toLowerCase().includes(termoBusca) ||
+      String(item.quantidade).includes(termoBusca) ||
+      (item.observacao && item.observacao.toLowerCase().includes(termoBusca));
+
+    return bateTipo && bateTexto;
+  });
+  
   return (
     <div className="layout-container">
       {/* Sidebar feita pelo integrante responsável */}
@@ -114,6 +130,15 @@ export default function Movimentacoes() {
               </button>
             </div>
           </div>
+
+          <input
+            type="search"
+            className="input-pesquisa"
+            placeholder="Busque por uma movimentação ou produto..."
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            aria-label="Buscar movimentação"
+          />
         </header>
 
         {carregando && <p className="mensagem-status">Carregando histórico...</p>}
@@ -126,7 +151,7 @@ export default function Movimentacoes() {
         )}
 
         {!carregando && !erro && listaFiltrada.length === 0 && (
-          <p className="mensagem-status">Nenhuma movimentação registrada.</p>
+          <p className="mensagem-status">Nenhuma movimentação encontrada.</p>
         )}
 
         <section className="lista-movimentacoes">

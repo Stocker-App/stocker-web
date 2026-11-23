@@ -50,13 +50,48 @@
 }
 
 /* Topo com botão redondo de filtro */
+/* Topo com botão redondo de filtro e barra de pesquisa */
 .movimentacoes-topo {
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
+  gap: 20px;
   margin-bottom: 32px;
   position: relative;
   z-index: 30;
+}
+
+.layout-container .input-pesquisa {
+  flex: 1;
+  max-width: 680px;
+  background-color: #ffffff;
+  color: #260e0a;
+  border: none;
+  border-radius: 28px;
+  padding: 15px 26px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  outline: none;
+  transform: none;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.layout-container .input-pesquisa::placeholder {
+  color: rgba(38, 14, 10, 0.55);
+}
+
+.layout-container .input-pesquisa:hover {
+  background-color: #ffffff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  transform: none;
+}
+
+.layout-container .input-pesquisa:focus {
+  background-color: #ffffff;
+  box-shadow: 0 10px 26px rgba(38, 14, 10, 0.28);
+  transform: none;
 }
 
 .filtro-wrapper {
