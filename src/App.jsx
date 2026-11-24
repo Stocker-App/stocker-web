@@ -1,13 +1,9 @@
-import { useState } from 'react'
 import './App.css'
-import Login from './pages/Login.jsx'
+import Produtos from '../pages/Produtos.jsx'
 
 function App() {
-
   return (
-    <>
-      <Login />
-    </>
+    <Produtos />
   )
 }
 

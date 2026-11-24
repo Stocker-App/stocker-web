@@ -5,13 +5,13 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
-div {
+.pagina-login div {
   display:flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-input {
+.pagina-login input {
   background-color: #ffead9c7;
   border: 0;
   border-radius: 20px;
@@ -21,15 +21,15 @@ input {
   box-shadow: 6px 3px 20px #0000007c;
   transition: box-shadow 200ms ease-in-out, transform 200ms ease-in-out, background-color 200ms ease-in-out;
 }
-input:focus {
+.pagina-login input:focus {
   outline: none;
   box-shadow: 7px 5px 15px #000000b9;
   transform: scale(1.04);
 }
-input:hover {
+.pagina-login input:hover {
   background-color: #fff6eec7;
 }
-button {
+.pagina-login button {
   cursor: pointer;
   background-color: #260808;
   border: 0;
@@ -39,22 +39,22 @@ button {
   box-shadow: 6px 3px 20px #0000007c;
   transition: transform 110ms ease-in-out, letter-spacing 200ms ease-in-out, box-shadow 200ms ease-in-out, background-color 200ms ease-in-out;
 }
-button:hover{
+.pagina-login button:hover{
   transform: scale(1.1);
   letter-spacing: 2px;
 }
-button:active {
+.pagina-login button:active {
   transform: scale(0.9);
   background-color:#140404;
   box-shadow: 6px 3px 10px #0000007c;
 }
-h1 {
+.pagina-login h1 {
   color: #260808;
   font-family: "Special Gothic Expanded One", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
-h2 {
+.pagina-login h2 {
   color: #260808;
   margin-bottom: 20px;
 }

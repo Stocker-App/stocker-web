@@ -1,6 +1,6 @@
 export default function Login() {
  return (
-   <div>
+   <div className="pagina-login">
         <h1>Stocker</h1>
         <h2>Faça login</h2>
 
