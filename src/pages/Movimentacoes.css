@@ -3,34 +3,61 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #c8a588;
+  background-image: none;
+  overflow: hidden; /* evita barra dupla; a rolagem fica limpa dentro de .movimentacoes-conteudo */
+}
+
+/* Container principal travado na altura da tela (estilo app / ScrollView) */
 .layout-container {
   display: flex;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   background-color: #c8a588;
+  /* ícones pequenos*/
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23260e0a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' stroke-opacity='0.12'%3E%3Cg transform='translate(28 28) rotate(-18)'%3E%3Crect x='-10' y='-8' width='20' height='5' rx='1'/%3E%3Cpath d='M-8 -3v11h16V-3M-3 2h6'/%3E%3C/g%3E%3Cg transform='translate(88 84) rotate(16)'%3E%3Crect x='-10' y='-8' width='20' height='5' rx='1'/%3E%3Cpath d='M-8 -3v11h16V-3M-3 2h6'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 120px 120px;
 }
 
+/* Área com rolagem estilo ScrollView (roda do mouse + arrastar no touch) */
 .movimentacoes-conteudo {
   flex: 1;
-  padding: 36px 48px;
+  height: 100vh;
+  padding: 36px 48px 64px 48px;
   overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* rolagem fluida ao arrastar no celular/tablet */
+  touch-action: pan-y;
   position: relative;
 }
 
-/* Barra vertical decorativa no canto direito igual ao design */
-.movimentacoes-conteudo::after {
-  content: '';
-  position: fixed;
-  top: 40px;
-  right: 24px;
-  bottom: 40px;
-  width: 3px;
-  background-color: rgba(255, 255, 255, 0.65);
-  border-radius: 2px;
-  z-index: 1;
+/* Estilização discreta da barra de rolagem (Chrome, Edge, Safari) */
+.movimentacoes-conteudo::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Desfoca todo o fundo quando o menu de filtro abre */
+.movimentacoes-conteudo::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.movimentacoes-conteudo::-webkit-scrollbar-thumb {
+  background-color: rgba(38, 14, 10, 0.25);
+  border-radius: 999px;
+}
+
+.movimentacoes-conteudo::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(38, 14, 10, 0.42);
+}
+
+/* Desfoque de fundo quando o menu de filtro abre */
 .filtro-backdrop {
   position: fixed;
   inset: 0;
@@ -49,7 +76,6 @@
   }
 }
 
-/* Topo com botão redondo de filtro */
 /* Topo com botão redondo de filtro e barra de pesquisa */
 .movimentacoes-topo {
   display: flex;
@@ -61,39 +87,6 @@
   z-index: 30;
 }
 
-.layout-container .input-pesquisa {
-  flex: 1;
-  max-width: 680px;
-  background-color: #ffffff;
-  color: #260e0a;
-  border: none;
-  border-radius: 28px;
-  padding: 15px 26px;
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
-  outline: none;
-  transform: none;
-  transition: box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-.layout-container .input-pesquisa::placeholder {
-  color: rgba(38, 14, 10, 0.55);
-}
-
-.layout-container .input-pesquisa:hover {
-  background-color: #ffffff;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
-  transform: none;
-}
-
-.layout-container .input-pesquisa:focus {
-  background-color: #ffffff;
-  box-shadow: 0 10px 26px rgba(38, 14, 10, 0.28);
-  transform: none;
-}
-
 .filtro-wrapper {
   position: relative;
   display: inline-flex;
@@ -101,7 +94,6 @@
   align-items: flex-start;
 }
 
-/* Botão redondo "Filtro" */
 .btn-filtro-redondo {
   width: 74px;
   height: 74px;
@@ -110,7 +102,7 @@
   color: #ffffff;
   border: none;
   padding: 0;
-  margin-top: 0;
+  margin: 0;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -132,7 +124,6 @@
   transform: scale(0.97);
 }
 
-/* Container dos 3 botões saindo de baixo do botão redondo */
 .filtros-dropdown {
   position: absolute;
   top: 84px;
@@ -157,7 +148,7 @@
   color: #260e0a;
   border: none;
   padding: 10px 26px;
-  margin-top: 0;
+  margin: 0;
   border-radius: 25px;
   font-size: 15px;
   font-weight: 600;
@@ -183,6 +174,40 @@
   background-color: #eed6c2d0;
   transform: translateX(4px);
   letter-spacing: normal;
+}
+
+/* Barra de pesquisa branca com sombra */
+.layout-container .input-pesquisa {
+  flex: 1;
+  max-width: 680px;
+  background-color: #ffffff;
+  color: #260e0a;
+  border: none;
+  border-radius: 28px;
+  padding: 15px 26px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  outline: none;
+  transform: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.layout-container .input-pesquisa::placeholder {
+  color: rgba(38, 14, 10, 0.55);
+}
+
+.layout-container .input-pesquisa:hover {
+  background-color: #ffffff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  transform: none;
+}
+
+.layout-container .input-pesquisa:focus {
+  background-color: #ffffff;
+  box-shadow: 0 10px 26px rgba(38, 14, 10, 0.28);
+  transform: none;
 }
 
 /* Lista de cards */
@@ -274,10 +299,10 @@
   margin-top: 40px;
 }
 
-/* Responsividade básica para celular/tablet */
+/* Responsividade */
 @media (max-width: 768px) {
   .movimentacoes-conteudo {
-    padding: 20px;
+    padding: 20px 20px 48px 20px;
   }
 
   .card-movimentacao {
