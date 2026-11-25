@@ -36,6 +36,9 @@ function App() {
             {/* Rota da página inicial 2 (só para testes)*/}
             <Route path="/home2" element={<Home2 />} />
 
+            {/* Rota da tela de dashboard */}
+            <Route path="/dashboard" element={<Dashboard />} />
+
             {/* Outras rotas serão adicionadas aqui */}
 
           </Route>

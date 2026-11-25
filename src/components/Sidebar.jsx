@@ -33,6 +33,10 @@ export default function Sidebar() {
             <NavLink to="/home2" className="sidebar-link">
                 Início 2
             </NavLink>
+
+            <NavLink to="/dashboard" className="sidebar-link">
+                Dashboard
+            </NavLink>
         </nav>
 
         <div className="sidebar-footer">
