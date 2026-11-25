@@ -46,7 +46,7 @@ button {
 button:hover{
   transform: scale(1.1);
   letter-spacing: 2px;
-  background-color: rgb(61, 13, 13);
+  background-color: #3d0d0d;
 }
 button:active {
   transform: scale(0.9);
