@@ -84,9 +84,6 @@ const termoBusca = busca.trim().toLowerCase();
   
   return (
     <div className="layout-container">
-      {/* Sidebar feita pelo integrante responsável */}
-
-      {/* Camada que desfoca o fundo quando o menu de filtro está aberto */}
       {filtroAberto && (
         <div
           className="filtro-backdrop"
