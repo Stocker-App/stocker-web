@@ -1,0 +1,245 @@
+/* Tudo começa com .dashboard ou .dash- para não vazar para outras telas */
+
+.dashboard {
+  --cor-fundo: #c8a588;
+  --cor-escura: #260808;
+  --cor-sidebar: #593c33;
+  --cor-creme: #ffead9;
+  --cor-trilho: #694d44;
+  --cor-alerta: #f2b8a0;
+
+  width: 100%; /* MUDOU: ocupa toda a largura (antes: max-width: 1100px) */
+  color: var(--cor-escura);
+}
+
+/* .dashboard h1 / h2 vencem os h1 / h2 globais do Login.css por especificidade */
+.dashboard h1 {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.dashboard h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: inherit;
+}
+
+.dash-cabecalho {
+  margin-bottom: 24px;
+}
+
+.dash-cabecalho p {
+  margin-top: 6px;
+  color: #3d0d0d;
+}
+
+/* MUDOU: só a primeira letra fica maiúscula ("Quarta-feira, 25 de novembro") */
+.dash-cabecalho p::first-letter {
+  text-transform: uppercase;
+}
+
+/* ---------- Indicadores: faixa discreta, sem cartões ---------- */
+
+.dash-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 28px;
+  border-top: 1px solid #26080840;
+  border-bottom: 1px solid #26080840;
+}
+
+.dash-kpi {
+  padding: 16px 20px;
+}
+
+.dash-kpi + .dash-kpi {
+  border-left: 1px solid #26080840;
+}
+
+.dash-kpi dt {
+  font-size: 14px;
+}
+
+.dash-kpi dd {
+  margin-top: 6px;
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: clamp(22px, 2vw, 32px); /* MUDOU: números crescem em telas grandes */
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Painéis ---------- */
+
+.dash-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 20px;
+  align-items: stretch; /* MUDOU: os dois painéis de cima ficam com a mesma altura */
+}
+
+.dash-largo {
+  grid-column: 1 / -1;
+}
+
+.dash-panel {
+  background-color: var(--cor-creme);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 6px 20px #2608081f;
+}
+
+.dash-panel-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+/* Painel de alerta: o único escuro da tela, para chamar atenção */
+.dash-panel-alerta {
+  background-color: var(--cor-escura);
+  color: var(--cor-creme);
+}
+
+.dash-repor {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dash-repor-linha {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.dash-repor-status {
+  color: var(--cor-alerta);
+  white-space: nowrap;
+}
+
+.dash-barra {
+  margin-top: 6px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--cor-trilho);
+  overflow: hidden;
+}
+
+.dash-barra-preenchida {
+  height: 100%;
+  border-radius: 4px;
+  background-color: var(--cor-alerta);
+}
+
+.dash-vazio {
+  font-size: 14px;
+}
+
+/* ---------- Gráfico ---------- */
+
+.dash-legenda {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+}
+
+.dash-legenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dash-legenda-cor {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* fill pinta as barras do SVG; background-color pinta o quadradinho da legenda */
+.dash-cor-entrada { fill: var(--cor-sidebar); background-color: var(--cor-sidebar); }
+.dash-cor-saida   { fill: #c4673f;            background-color: #c4673f; }
+
+.dash-grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dash-grafico-base {
+  stroke: #26080859;
+  stroke-width: 1;
+}
+
+.dash-grafico-valor,
+.dash-grafico-rotulo {
+  fill: var(--cor-escura);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.dash-grafico-rotulo {
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+/* ---------- Tabela ---------- */
+
+.dash-tabela-rolagem {
+  overflow-x: auto;
+}
+
+.dash-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.dash-tabela th,
+.dash-tabela td {
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dash-tabela thead th {
+  font-weight: 700;
+  border-bottom: 2px solid var(--cor-escura);
+}
+
+.dash-tabela tbody tr + tr td {
+  border-top: 1px solid #26080826;
+}
+
+.dash-tabela .dash-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 1000px) {
+  .dash-grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dash-kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dash-kpi:nth-child(3) {
+    border-left: 0;
+  }
+
+  .dash-kpi:nth-child(n + 3) {
+    border-top: 1px solid #26080840;
+  }
+}
