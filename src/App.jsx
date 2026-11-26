@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import Movimentacoes from './pages/Movimentacoes';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Home from './pages/Home.jsx'
@@ -10,9 +11,9 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Layout from './components/Layout.jsx'
 
 function App() {
-
   return (
     <>
+      <Movimentacoes />
       <BrowserRouter>
 
         <Routes>
