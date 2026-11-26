@@ -13,7 +13,7 @@ body {
   overflow: hidden; /* evita barra dupla; a rolagem fica limpa dentro de .movimentacoes-conteudo */
 }
 
-/* Container principal travado na altura da tela (estilo app / ScrollView) */
+/* Container principal travado na altura da tela */
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -26,7 +26,7 @@ body {
   background-size: 120px 120px;
 }
 
-/* Área com rolagem estilo ScrollView (roda do mouse + arrastar no touch) */
+/* Área com rolagem */
 .movimentacoes-conteudo {
   flex: 1;
   height: 100vh;
@@ -39,7 +39,7 @@ body {
   position: relative;
 }
 
-/* Estilização discreta da barra de rolagem (Chrome, Edge, Safari) */
+/* Estilização da barra de rolagem*/
 .movimentacoes-conteudo::-webkit-scrollbar {
   width: 8px;
 }
@@ -76,7 +76,7 @@ body {
   }
 }
 
-/* Topo com botão redondo de filtro e barra de pesquisa */
+/* Topo com botão de filtro e barra de pesquisa */
 .movimentacoes-topo {
   display: flex;
   justify-content: flex-start;
@@ -176,7 +176,7 @@ body {
   letter-spacing: normal;
 }
 
-/* Barra de pesquisa branca com sombra */
+/* Barra de pesquisa  */
 .layout-container .input-pesquisa {
   flex: 1;
   max-width: 680px;
