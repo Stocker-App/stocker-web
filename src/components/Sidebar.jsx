@@ -41,6 +41,9 @@ export default function Sidebar() {
             <NavLink to="/dashboard" className="sidebar-link">
                 Dashboard
             </NavLink>
+            <NavLink to="/produtos" className="sidebar-link">
+                Produtos
+            </NavLink>
             <NavLink to="/movimentacoes" className="sidebar-link">
                 Movimentações
             </NavLink>

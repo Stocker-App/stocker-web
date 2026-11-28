@@ -1,5 +1,6 @@
 import './App.css'
 import Movimentacoes from './pages/Movimentacoes';
+import Produtos from './pages/Produtos';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Home from './pages/Home.jsx'
@@ -42,6 +43,9 @@ function App() {
               {/* Rota da tela de dashboard */}
               <Route path="/dashboard" element={<Dashboard />} />
               
+              {/* Rota da tela de produtos */}
+              <Route path="/produtos" element={<Produtos />} />
+
               {/* Rota da tela de movimentações */}
               <Route path="/movimentacoes" element={<Movimentacoes />} />
 
