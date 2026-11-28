@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
+import useAuth from '../hooks/useAuth';
 import './Sidebar.css';
 
 export default function Sidebar() {
@@ -7,9 +8,12 @@ export default function Sidebar() {
  
  const [retraida, setRetraida] = useState(false);
 
- const logout = () => {
-    // Remove o token do localStorage para realizar logout
-    localStorage.removeItem('token');
+ // Pega a função logout e os dados do usuário do contexto
+ const { usuario, logout } = useAuth();
+
+ const handleLogout = () => {
+    // Chama o logout do contexto (limpa estado global + localStorage)
+    logout();
 
     // Redireciona para a página de login
     navigate('/login');
@@ -37,10 +41,20 @@ export default function Sidebar() {
             <NavLink to="/dashboard" className="sidebar-link">
                 Dashboard
             </NavLink>
+            <NavLink to="/produtos" className="sidebar-link">
+                Produtos
+            </NavLink>
+            <NavLink to="/movimentacoes" className="sidebar-link">
+                Movimentações
+            </NavLink>
         </nav>
 
         <div className="sidebar-footer">
-            <button onClick={logout} className="logout-button">
+            {/* Mostra o nome do usuário logado, se disponível */}
+            {usuario && (
+              <p className="sidebar-usuario">{usuario.nome}</p>
+            )}
+            <button onClick={handleLogout} className="logout-button">
                 Sair
             </button>
         </div>
