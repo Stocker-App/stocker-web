@@ -1,0 +1,126 @@
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #593c33;
+    color: #fff;
+    padding: 20px;
+    display:flex;
+    flex-direction: column;
+    transition: width 0.3s ease-in-out;
+}
+
+.sidebar-retraida {
+    width: 65px;
+    padding: 20px 10px;
+}
+
+/*Oculta tudo menos o botão de expandir a barra, quando ela está retraida*/
+.sidebar-retraida .sidebar-header h2,
+.sidebar-retraida .sidebar-nav,
+.sidebar-retraida .sidebar-footer {
+  display: none;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.retract-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: none;
+    padding: 5px 10px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.sidebar-nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #694d44;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.sidebar-nav a:hover {
+    background-color: #7a5c4f;
+}
+
+.sidebar-nav a.active {
+    background-color: #260808;
+    border: 1px solid #ffead9;
+    
+}
+
+.sidebar-nav a.active:hover {
+    background-color: #3d0d0d;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+.sidebar-usuario {
+    color: #ffead9;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+    opacity: 0.9;
+}
+
+.logout-button {
+    width: 100%;
+    background-color: #500000;
+    color: #fff;
+    border: 0;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out transform 200ms ease-in-out;
+}
+
+/*Adaptabilidade para o celular*/
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        padding: 5px 15px;
+        min-height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        z-index: 1000;
+    }
+    
+    .sidebar-header {
+        display: none;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        gap: 10px;
+        margin-top: 0;
+    }
+
+    .sidebar-nav a {
+        padding: 5px 10px;
+    }
+
+    .sidebar-footer {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
