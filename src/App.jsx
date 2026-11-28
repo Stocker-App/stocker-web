@@ -13,7 +13,6 @@ import Layout from './components/Layout.jsx'
 function App() {
   return (
     <>
-      <Movimentacoes />
       <BrowserRouter>
 
         <Routes>
@@ -39,6 +38,9 @@ function App() {
 
             {/* Rota da tela de dashboard */}
             <Route path="/dashboard" element={<Dashboard />} />
+            
+            {/* Rota da tela de movimentações */}
+            <Route path="/movimentacoes" element={<Movimentacoes />} />
 
             {/* Outras rotas serão adicionadas aqui */}
 

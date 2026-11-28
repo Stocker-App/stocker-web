@@ -37,6 +37,9 @@ export default function Sidebar() {
             <NavLink to="/dashboard" className="sidebar-link">
                 Dashboard
             </NavLink>
+            <NavLink to="/movimentacoes" className="sidebar-link">
+                Movimentações
+            </NavLink>
         </nav>
 
         <div className="sidebar-footer">
