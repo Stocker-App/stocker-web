@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import {useNavigate, Navigate} from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 import './Login.css'
 
@@ -15,6 +16,14 @@ export default function Login() {
 
   // Hook de navegação do React Router para redirecionar após login bem-sucedido
   const navigate = useNavigate();
+
+  // Hook personalizado que acessa o contexto de autenticação
+  const { autenticado, login } = useAuth();
+
+  // Se o usuário já estiver logado, redireciona para a página inicial
+  if (autenticado) {
+    return <Navigate to="/" replace/>;
+  }
 
   // Função acionada ao clicar no botão de login ou dar Enter
   // Responsável por validar as credenciais e redirecionar o usuário
@@ -36,23 +45,17 @@ export default function Login() {
         setError(dados?.message || 'Nome de usuário ou senha inválidos');
         return;
       }
-      localStorage.setItem('token', dados.token);
-      localStorage.setItem(
-        'usuario',
-        JSON.stringify({ id: dados.id, nome: dados.nome, username: dados.username, role: dados.role })
-      );
-      navigate('/movimentacoes');
+
+      // Usa a função login do contexto (que salva no estado global + localStorage)
+      login(dados);
+
+      navigate('/');
     } catch {
       setError('Não foi possível conectar ao servidor.');
     } finally {
       setLoading(false);
     }
   };
-
-  if (localStorage.getItem('token')) {
-    // Se o usuário já estiver logado, redireciona para a página inicial
-    return <Navigate to="/" replace/>;
-  }
 
  return (
    <div className="login-container">
