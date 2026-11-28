@@ -19,31 +19,35 @@ export default function Login() {
   // Função acionada ao clicar no botão de login ou dar Enter
   // Responsável por validar as credenciais e redirecionar o usuário
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Evita que o HTML recarregue a paágina
-    setError(''); // Define uma mensagem de erro vazia para limpar erros anteriores
-    setLoading(true); // Define que está carregando para mostrar feedback visual
-
-    // Simula uma espera de 1s para imitar uma requisição de login
-    setTimeout(() => {
-      // Regra de teste temporária para o login fake
-      if (username === 'admin' && password === '123456'){
-        // Guarda um token fake no navegador para simular autenticação
-        localStorage.setItem('token', 'token-fake');
-
-        // Define que não está mais carregando
-        setLoading(false);
-
-        // Redireciona para a página inicial
-        navigate('/');
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/auth/login`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        }
+      );
+      const dados = await resposta.json();
+      if (!resposta.ok) {
+        setError(dados?.message || 'Nome de usuário ou senha inválidos');
+        return;
       }
-      else {
-        setLoading(false);
-
-        // Seta o erro de credenciais incorretas
-        setError('Nome de usuário ou senha inválidos');
-      }
-    }, 1000);
-  }
+      localStorage.setItem('token', dados.token);
+      localStorage.setItem(
+        'usuario',
+        JSON.stringify({ id: dados.id, nome: dados.nome, username: dados.username, role: dados.role })
+      );
+      navigate('/movimentacoes');
+    } catch {
+      setError('Não foi possível conectar ao servidor.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (localStorage.getItem('token')) {
     // Se o usuário já estiver logado, redireciona para a página inicial
