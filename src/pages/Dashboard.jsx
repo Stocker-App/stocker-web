@@ -1,94 +1,25 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
+import { apiFetch } from '../services/api';
 import './Dashboard.css';
-
-// ---------- Dados de exemplo (depois troque por chamadas à API) ----------
-
-const agora = new Date();
-
-// Cria uma data "n" dias atrás, em uma determinada hora
-const diasAtras = (n, hora = 10, minuto = 0) => {
-  const d = new Date(agora);
-  d.setDate(d.getDate() - n);
-  d.setHours(hora, minuto, 0, 0);
-  return d.toISOString();
-};
-
-const produtos = [
-  { id: 1,  nome: 'Arroz 5kg',            quantidade: 4,  minimo: 20, preco: 28.9 },
-  { id: 2,  nome: 'Feijão carioca 1kg',   quantidade: 0,  minimo: 25, preco: 8.5 },
-  { id: 3,  nome: 'Óleo de soja 900ml',   quantidade: 31, minimo: 15, preco: 7.2 },
-  { id: 4,  nome: 'Detergente 500ml',     quantidade: 9,  minimo: 18, preco: 2.8 },
-  { id: 5,  nome: 'Água sanitária 2L',    quantidade: 22, minimo: 10, preco: 6.4 },
-  { id: 6,  nome: 'Papel higiênico 12un', quantidade: 12, minimo: 15, preco: 19.9 },
-  { id: 7,  nome: 'Sabonete 90g',         quantidade: 64, minimo: 30, preco: 2.2 },
-  { id: 8,  nome: 'Café torrado 500g',    quantidade: 3,  minimo: 12, preco: 17.5 },
-  { id: 9,  nome: 'Leite integral 1L',    quantidade: 48, minimo: 40, preco: 5.3 },
-  { id: 10, nome: 'Açúcar 1kg',           quantidade: 27, minimo: 20, preco: 4.9 },
-];
-
-const movimentacoes = [
-  { id: 1,  produtoId: 1,  tipo: 'saida',   quantidade: 12, data: diasAtras(0, 9, 40) },
-  { id: 2,  produtoId: 9,  tipo: 'entrada', quantidade: 60, data: diasAtras(0, 8, 15) },
-  { id: 3,  produtoId: 2,  tipo: 'saida',   quantidade: 18, data: diasAtras(1, 16, 5) },
-  { id: 4,  produtoId: 8,  tipo: 'saida',   quantidade: 6,  data: diasAtras(1, 11, 30) },
-  { id: 5,  produtoId: 3,  tipo: 'entrada', quantidade: 40, data: diasAtras(2, 14, 0) },
-  { id: 6,  produtoId: 4,  tipo: 'saida',   quantidade: 10, data: diasAtras(2, 10, 20) },
-  { id: 7,  produtoId: 7,  tipo: 'entrada', quantidade: 80, data: diasAtras(3, 9, 0) },
-  { id: 8,  produtoId: 6,  tipo: 'saida',   quantidade: 7,  data: diasAtras(3, 15, 45) },
-  { id: 9,  produtoId: 10, tipo: 'saida',   quantidade: 9,  data: diasAtras(4, 13, 10) },
-  { id: 10, produtoId: 5,  tipo: 'entrada', quantidade: 25, data: diasAtras(4, 8, 50) },
-  { id: 11, produtoId: 1,  tipo: 'saida',   quantidade: 14, data: diasAtras(5, 17, 0) },
-  { id: 12, produtoId: 9,  tipo: 'saida',   quantidade: 22, data: diasAtras(5, 12, 30) },
-  { id: 13, produtoId: 2,  tipo: 'saida',   quantidade: 15, data: diasAtras(6, 10, 0) },
-  { id: 14, produtoId: 10, tipo: 'entrada', quantidade: 30, data: diasAtras(6, 9, 15) },
-];
 
 // ---------- Formatadores ----------
 
 const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 const numero = new Intl.NumberFormat('pt-BR');
 
-// Chave do dia no fuso local, para agrupar movimentações por dia
-const chaveDoDia = (data) => {
-  const d = new Date(data);
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-};
+// ---------- Adaptadores (API -> formato que os componentes usam) ----------
 
-// ---------- Cálculos ----------
-
-function calcularIndicadores(lista) {
-  const abaixoDoMinimo = lista.filter((p) => p.quantidade <= p.minimo);
+// A API devolve "2026-11-28" (só a data). Criamos a data no fuso local
+// para o rótulo do dia da semana não "voltar" um dia.
+function paraDiaDoGrafico(item) {
+  const [ano, mes, dia] = item.data.split('-').map(Number);
+  const d = new Date(ano, mes - 1, dia);
   return {
-    totalProdutos: lista.length,
-    totalUnidades: lista.reduce((soma, p) => soma + p.quantidade, 0),
-    valorEmEstoque: lista.reduce((soma, p) => soma + p.quantidade * p.preco, 0),
-    qtdAbaixoDoMinimo: abaixoDoMinimo.length,
-    // Os mais críticos primeiro (menor proporção entre estoque atual e mínimo)
-    paraRepor: [...abaixoDoMinimo].sort(
-      (a, b) => a.quantidade / a.minimo - b.quantidade / b.minimo
-    ),
+    chave: item.data,
+    rotulo: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''),
+    entradas: item.entradas,
+    saidas: item.saidas,
   };
-}
-
-function agruparPorDia(lista, quantidadeDeDias = 7) {
-  const dias = [];
-  for (let i = quantidadeDeDias - 1; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    dias.push({
-      chave: chaveDoDia(d),
-      rotulo: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''),
-      entradas: 0,
-      saidas: 0,
-    });
-  }
-  for (const m of lista) {
-    const dia = dias.find((x) => x.chave === chaveDoDia(m.data));
-    if (!dia) continue;
-    if (m.tipo === 'entrada') dia.entradas += m.quantidade;
-    else dia.saidas += m.quantidade;
-  }
-  return dias;
 }
 
 // ---------- Componentes ----------
@@ -96,9 +27,9 @@ function agruparPorDia(lista, quantidadeDeDias = 7) {
 function Indicadores({ dados }) {
   const itens = [
     { rotulo: 'Produtos cadastrados', valor: numero.format(dados.totalProdutos) },
-    { rotulo: 'Unidades em estoque', valor: numero.format(dados.totalUnidades) },
-    { rotulo: 'Valor em estoque', valor: moeda.format(dados.valorEmEstoque) },
-    { rotulo: 'Abaixo do mínimo', valor: numero.format(dados.qtdAbaixoDoMinimo) },
+    { rotulo: 'Unidades em estoque', valor: numero.format(dados.totalUnidadesEmEstoque) },
+    { rotulo: 'Valor em estoque', valor: moeda.format(dados.valorTotalEstoque) },
+    { rotulo: 'Abaixo do mínimo', valor: numero.format(dados.produtosEmAlerta) },
   ];
 
   return (
@@ -114,27 +45,32 @@ function Indicadores({ dados }) {
 }
 
 function PrecisaRepor({ lista }) {
+  // Os mais críticos primeiro (menor proporção entre estoque atual e mínimo)
+  const ordenada = [...lista].sort(
+    (a, b) =>
+      a.quantidadeAtual / (a.estoqueMinimo || 1) - b.quantidadeAtual / (b.estoqueMinimo || 1)
+  );
+
   return (
     <section className="dash-panel dash-panel-alerta" aria-labelledby="titulo-repor">
       <h2 id="titulo-repor">Precisa de reposição</h2>
 
-      {lista.length === 0 ? (
+      {ordenada.length === 0 ? (
         <p className="dash-vazio">Tudo certo: nenhum produto abaixo do mínimo.</p>
       ) : (
         <ul className="dash-repor">
-          {lista.slice(0, 6).map((p) => {
-            const esgotado = p.quantidade === 0;
-            const percentual = Math.min(p.quantidade / p.minimo, 1) * 100;
+          {ordenada.slice(0, 6).map((p) => {
+            const esgotado = p.severidade === 'CRITICO';
             return (
-              <li key={p.id}>
+              <li key={p.produtoId}>
                 <div className="dash-repor-linha">
-                  <span className="dash-repor-nome">{p.nome}</span>
+                  <span className="dash-repor-nome">{p.produtoNome}</span>
                   <span className="dash-repor-status">
-                    {esgotado ? 'Esgotado' : `${p.quantidade} de ${p.minimo}`}
+                    {esgotado ? 'Esgotado' : `${p.quantidadeAtual} de ${p.estoqueMinimo}`}
                   </span>
                 </div>
                 <div className="dash-barra" aria-hidden="true">
-                  <div className="dash-barra-preenchida" style={{ width: `${percentual}%` }} />
+                  <div className="dash-barra-preenchida" style={{ width: `${p.percentualEstoque}%` }} />
                 </div>
               </li>
             );
@@ -211,47 +147,50 @@ function GraficoMovimentacao({ dias }) {
   );
 }
 
-function UltimasMovimentacoes({ lista, produtosPorId }) {
-  const recentes = [...lista]
-    .sort((a, b) => new Date(b.data) - new Date(a.data))
-    .slice(0, 6);
-
+function UltimasMovimentacoes({ lista }) {
   return (
     <section className="dash-panel dash-largo" aria-labelledby="titulo-mov">
       <h2 id="titulo-mov">Últimas movimentações</h2>
 
-      <div className="dash-tabela-rolagem">
-        <table className="dash-tabela">
-          <thead>
-            <tr>
-              <th>Produto</th>
-              <th>Tipo</th>
-              <th className="dash-num">Quantidade</th>
-              <th>Quando</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recentes.map((m) => {
-              const entrada = m.tipo === 'entrada';
-              return (
-                <tr key={m.id}>
-                  <td>{produtosPorId[m.produtoId]?.nome ?? 'Produto removido'}</td>
-                  <td>{entrada ? 'Entrada' : 'Saída'}</td>
-                  <td className="dash-num">{entrada ? '+' : '−'}{m.quantidade}</td>
-                  <td>
-                    {new Date(m.data).toLocaleString('pt-BR', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      {lista.length === 0 ? (
+        <p className="dash-vazio">Nenhuma movimentação registrada ainda.</p>
+      ) : (
+        <div className="dash-tabela-rolagem">
+          <table className="dash-tabela">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th className="dash-num">Quantidade</th>
+                <th>Quando</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lista.map((m) => {
+                const entrada = m.tipo === 'ENTRADA';
+                return (
+                  <tr key={m.id}>
+                    <td>{m.produtoNome}</td>
+                    <td>
+                      {entrada ? 'Entrada' : 'Saída'}
+                      {m.estornada ? ' (estornada)' : ''}
+                    </td>
+                    <td className="dash-num">{entrada ? '+' : '−'}{m.quantidade}</td>
+                    <td>
+                      {new Date(m.data).toLocaleString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   );
 }
@@ -259,12 +198,36 @@ function UltimasMovimentacoes({ lista, produtosPorId }) {
 // ---------- Página ----------
 
 export default function Dashboard() {
-  const indicadores = useMemo(() => calcularIndicadores(produtos), []);
-  const dias = useMemo(() => agruparPorDia(movimentacoes, 7), []);
-  const produtosPorId = useMemo(
-    () => Object.fromEntries(produtos.map((p) => [p.id, p])),
-    []
-  );
+  const [resumo, setResumo] = useState(null);
+  const [alertas, setAlertas] = useState([]);
+  const [porDia, setPorDia] = useState([]);
+  const [recentes, setRecentes] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState('');
+
+  useEffect(() => {
+    async function carregar() {
+      setCarregando(true);
+      setErro('');
+      try {
+        const [r, a, d, m] = await Promise.all([
+          apiFetch('/dashboard/resumo'),
+          apiFetch('/alertas'),
+          apiFetch('/dashboard/movimentacoes-por-dia?dias=7'),
+          apiFetch('/dashboard/movimentacoes-recentes?limite=6'),
+        ]);
+        setResumo(r);
+        setAlertas(a || []);
+        setPorDia((d || []).map(paraDiaDoGrafico));
+        setRecentes(m || []);
+      } catch (err) {
+        setErro(err.message || 'Não foi possível carregar o dashboard.');
+      } finally {
+        setCarregando(false);
+      }
+    }
+    carregar();
+  }, []);
 
   const hoje = new Date().toLocaleDateString('pt-BR', {
     weekday: 'long',
@@ -279,13 +242,25 @@ export default function Dashboard() {
         <p>{hoje}</p>
       </header>
 
-      <Indicadores dados={indicadores} />
+      {carregando && <p className="dash-vazio">Carregando dados do estoque...</p>}
 
-      <div className="dash-grade">
-        <PrecisaRepor lista={indicadores.paraRepor} />
-        <GraficoMovimentacao dias={dias} />
-        <UltimasMovimentacoes lista={movimentacoes} produtosPorId={produtosPorId} />
-      </div>
+      {erro && (
+        <p className="dash-vazio" role="alert">
+          {erro}
+        </p>
+      )}
+
+      {!carregando && !erro && resumo && (
+        <>
+          <Indicadores dados={resumo} />
+
+          <div className="dash-grade">
+            <PrecisaRepor lista={alertas} />
+            <GraficoMovimentacao dias={porDia} />
+            <UltimasMovimentacoes lista={recentes} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
